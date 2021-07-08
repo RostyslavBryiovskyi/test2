@@ -1,0 +1,4 @@
+[core]
+    remote = ssh-storage
+['remote "ssh-storage"']
+    url = ssh://user@52.234.230.8:/mnt/work/srorage_bg

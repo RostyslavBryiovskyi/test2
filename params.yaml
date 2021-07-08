@@ -1,0 +1,18 @@
+train:
+  model:
+    version: u2net
+    resume: True
+    device: cuda
+    checkpoint_path: saved_models/u2net/u2net.pth
+    save_path: saved_models/u2net/u2net.onnx
+  HParams:
+    lr: 0.0001
+    epochs: 1
+    batch_size: 12
+  other:
+    images_dir: dataset/im
+    masks_dir: dataset/gt
+    exp_name: u2net_resume
+evaluate:
+  evaluate_or_test: test
+  test_data: test_data/test_images

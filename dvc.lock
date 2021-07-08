@@ -1,0 +1,66 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python src/u2net_train.py --config=params.yaml
+    deps:
+    - path: dataset
+      md5: c0e84965c73d99a64d23237b17a3c254.dir
+      size: 686825324
+      nfiles: 44322
+    - path: src/u2net_train.py
+      md5: a4698f5f97b74c4e413d5eb5788d928f
+      size: 7516
+    params:
+      params.yaml:
+        train:
+          model:
+            version: u2net
+            resume: true
+            device: cuda
+            checkpoint_path: saved_models/u2net/u2net.pth
+            save_path: saved_models/u2net/u2net.onnx
+          HParams:
+            lr: 0.0001
+            epochs: 1
+            batch_size: 12
+          other:
+            images_dir: dataset/im
+            masks_dir: dataset/gt
+            exp_name: u2net_resume
+    outs:
+    - path: saved_models/u2net/u2net.onnx
+      md5: d6cddb62e3052900be341bb132c30263
+      size: 175997641
+  evaluate:
+    cmd: python src/u2net_test.py --config=params.yaml
+    deps:
+    - path: DUTS-TE
+      md5: 1acd23b6cb1b3507843aa24929b672aa.dir
+      size: 138811189
+      nfiles: 10039
+    - path: saved_models/u2net/u2net.onnx
+      md5: d6cddb62e3052900be341bb132c30263
+      size: 175997641
+    - path: src/u2net_test.py
+      md5: fd118c3bde8a36fc2765e548ee1c02cd
+      size: 5741
+    params:
+      params.yaml:
+        evaluate:
+          evaluate_or_test: test
+          test_data: test_data/test_images
+        train:
+          model:
+            version: u2net
+            resume: true
+            device: cuda
+            checkpoint_path: saved_models/u2net/u2net.pth
+            save_path: saved_models/u2net/u2net.onnx
+          HParams:
+            lr: 0.0001
+            epochs: 1
+            batch_size: 12
+          other:
+            images_dir: dataset/im
+            masks_dir: dataset/gt
+            exp_name: u2net_resume

@@ -1,0 +1,19 @@
+stages:
+  train:
+    cmd: python src/u2net_train.py --config=params.yaml
+    deps:
+    - src/u2net_train.py
+    - dataset
+    params:
+    - train
+    outs:
+      - ${train.model.save_path}
+  evaluate:
+    cmd: python src/u2net_test.py --config=params.yaml
+    deps:
+    - ${train.model.save_path}
+    - DUTS-TE
+    - src/u2net_test.py
+    params:
+    - train
+    - evaluate
